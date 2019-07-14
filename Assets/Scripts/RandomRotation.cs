@@ -9,5 +9,6 @@ public class RandomRotation : MonoBehaviour
     {
         transform.Rotate(Vector3.forward, 90 * Random.Range(0,3));
         transform.Rotate(Vector3.up, 180 * Random.Range(0, 2));
+        Destroy(this);
     }
 }
