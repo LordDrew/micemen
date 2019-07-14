@@ -43,5 +43,9 @@ public class Board : MonoBehaviour
         {
             columns[selectedColumn].MoveUp();
         }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            columns[selectedColumn].MoveDown();
+        }
     }
 }

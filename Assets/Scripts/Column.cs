@@ -59,4 +59,36 @@ public class Column : MonoBehaviour
         }
         isMoving = false;
     }
+    public void MoveDown()
+    {
+        if (isMoving)
+            return;
+        isMoving = true;
+        StartCoroutine(SlowMoveDown());
+    }
+    IEnumerator SlowMoveDown()
+    {
+        Cell tmpCell = Instantiate(cells[0], transform);
+        tmpCell.transform.localPosition = new Vector3(0, scale * 13);
+        int steps = 25;
+        for (int i = 0; i < steps; i++)
+        {
+            yield return new WaitForSeconds(1 / steps);
+            transform.position -= new Vector3(0, scale / steps);
+        }
+        Destroy(tmpCell.gameObject);
+        //reposition cells
+        transform.position += new Vector3(0, scale);
+        tmpCell = cells[0];
+        for (int i = 0; i < 12; i++)
+        {
+            cells[i] = cells[i + 1];
+        }
+        cells[12] = tmpCell;
+        for (int i = 0; i < 13; i++)
+        {
+            cells[i].transform.localPosition = new Vector3(0, scale * i);
+        }
+        isMoving = false;
+    }
 }
