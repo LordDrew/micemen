@@ -7,6 +7,7 @@ public class Column : MonoBehaviour
     public Cell cellPrefab;
     public Cell[] cells;
     public float scale = 0.75f;
+    public bool isMoving = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +28,9 @@ public class Column : MonoBehaviour
     }
     public void MoveUp()
     {
-        StopAllCoroutines();
+        if (isMoving)
+            return;
+        isMoving = true;
         StartCoroutine(SlowMoveUp());
     }
     IEnumerator SlowMoveUp()
@@ -54,5 +57,6 @@ public class Column : MonoBehaviour
         {
             cells[i].transform.localPosition = new Vector3(0, scale * i);
         }
+        isMoving = false;
     }
 }
