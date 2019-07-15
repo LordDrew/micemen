@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8354081041668675214}
   - component: {fileID: 4805406725998443885}
+  - component: {fileID: 7635460191796247044}
   m_Layer: 0
   m_Name: MouseBlue
   m_TagString: Untagged
@@ -79,3 +80,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7635460191796247044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700268169818725378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb587bc3a025dc40b920540e61c237c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faction: 0

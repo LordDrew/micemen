@@ -393,6 +393,10 @@ MonoBehaviour:
     type: 3}
   columns: []
   arrow: {fileID: 602335514}
+  blueMousePrefab: {fileID: 7635460191796247044, guid: d10261c280aa47542ac84c22469b8403,
+    type: 3}
+  redMousePrefab: {fileID: 7389072870034079449, guid: 3db1210f02bda3e40bc5cca5065952c0,
+    type: 3}
 --- !u!4 &2078809549
 Transform:
   m_ObjectHideFlags: 0
