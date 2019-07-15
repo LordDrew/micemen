@@ -11,20 +11,24 @@ public class Column : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cells = new Cell[13];
-        for (int i = 0; i < 13; i++)
-        {
-            Cell cell = cells[i] = Instantiate(cellPrefab, transform);
-            cell.IsBG = Random.Range(0, 2) == 0;
-            cell.transform.localPosition = new Vector3(0, scale * i);
-            cell.name = string.Format("cell{0}", i);
-        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+    public void SetState(BoardState boardState, int column)
+    {
+        cells = new Cell[13];
+        for (int i = 0; i < 13; i++)
+        {
+            Cell cell = cells[i] = Instantiate(cellPrefab, transform);
+            cell.IsBG = !(boardState.tiles[i, column] == BoardState.TileType.Wall);
+            cell.transform.localPosition = new Vector3(0, scale * i);
+            cell.name = string.Format("cell{0}", i);
+        }
     }
     public void MoveUp()
     {
