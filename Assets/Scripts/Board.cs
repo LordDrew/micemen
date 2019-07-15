@@ -13,8 +13,8 @@ public class Board : MonoBehaviour
     void Start()
     {
         boardState = new BoardState();
-        columns = new Column[21];
-        for (int i = 0; i < 21; i++)
+        columns = new Column[boardState.tiles.GetLength(1)];
+        for (int i = 0; i < columns.Length; i++)
         {
             Column col = columns[i] = Instantiate(columnPrefab, transform);
             col.SetState(boardState, i);
@@ -30,7 +30,7 @@ public class Board : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             selectedColumn++;
-            selectedColumn %= 21;
+            selectedColumn %= columns.Length;
 
             arrow.transform.localPosition = new Vector3(0.75f * selectedColumn, -0.65f);
         }
@@ -38,7 +38,7 @@ public class Board : MonoBehaviour
         {
             selectedColumn--;
             if (selectedColumn < 0)
-                selectedColumn = 20;
+                selectedColumn = columns.Length - 1;
 
             arrow.transform.localPosition = new Vector3(0.75f * selectedColumn, -0.65f);
         }

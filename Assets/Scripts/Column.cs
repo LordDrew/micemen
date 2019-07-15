@@ -21,8 +21,8 @@ public class Column : MonoBehaviour
     }
     public void SetState(BoardState boardState, int column)
     {
-        cells = new Cell[13];
-        for (int i = 0; i < 13; i++)
+        cells = new Cell[boardState.tiles.GetLength(0)];
+        for (int i = 0; i < cells.Length; i++)
         {
             Cell cell = cells[i] = Instantiate(cellPrefab, transform);
             cell.IsBG = !(boardState.tiles[i, column] == BoardState.TileType.Wall);
@@ -39,9 +39,8 @@ public class Column : MonoBehaviour
     }
     IEnumerator SlowMoveUp()
     {
-        Cell tmpCell = Instantiate(cells[12], transform);
+        Cell tmpCell = Instantiate(cells[cells.Length - 1], transform);
         tmpCell.transform.localPosition = new Vector3(0, scale * -1);
-        //tmpCell.transform.rotation = cells[12].transform.rotation;
         int steps = 25;
         for (int i = 0; i < steps; i++)
         {
@@ -51,13 +50,13 @@ public class Column : MonoBehaviour
         Destroy(tmpCell.gameObject);
         //reposition cells
         transform.position -= new Vector3(0, scale);
-        tmpCell = cells[12];
-        for (int i = 12; i > 0; i--)
+        tmpCell = cells[cells.Length - 1];
+        for (int i = cells.Length - 1; i > 0; i--)
         {
             cells[i] = cells[i - 1];
         }
         cells[0] = tmpCell;
-        for (int i = 0; i < 13; i++)
+        for (int i = 0; i < cells.Length; i++)
         {
             cells[i].transform.localPosition = new Vector3(0, scale * i);
         }
@@ -73,7 +72,7 @@ public class Column : MonoBehaviour
     IEnumerator SlowMoveDown()
     {
         Cell tmpCell = Instantiate(cells[0], transform);
-        tmpCell.transform.localPosition = new Vector3(0, scale * 13);
+        tmpCell.transform.localPosition = new Vector3(0, scale * cells.Length);
         int steps = 25;
         for (int i = 0; i < steps; i++)
         {
@@ -84,12 +83,12 @@ public class Column : MonoBehaviour
         //reposition cells
         transform.position += new Vector3(0, scale);
         tmpCell = cells[0];
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < cells.Length - 1; i++)
         {
             cells[i] = cells[i + 1];
         }
-        cells[12] = tmpCell;
-        for (int i = 0; i < 13; i++)
+        cells[cells.Length - 1] = tmpCell;
+        for (int i = 0; i < cells.Length; i++)
         {
             cells[i].transform.localPosition = new Vector3(0, scale * i);
         }
