@@ -66,7 +66,7 @@ public class BoardState
             {
                 while(true)
                 {
-                    if (r < 12 && tiles[r + 1, c] == TileType.Empty) r++;
+                    if (r > 0 && tiles[r - 1, c] == TileType.Empty) r--;
                     else if (c < 9 && tiles[r, c + 1] == TileType.Empty) c++;
                     else break;
                 }
@@ -83,7 +83,7 @@ public class BoardState
             {
                 while (true)
                 {
-                    if (r < 12 && tiles[r + 1, c] == TileType.Empty) r++;
+                    if (r > 0 && tiles[r - 1, c] == TileType.Empty) r--;
                     else if (c > 11 && tiles[r, c - 1] == TileType.Empty) c--;
                     else break;
                 }
