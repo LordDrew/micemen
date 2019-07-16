@@ -11,11 +11,20 @@ public class BoardState
         RedMouse,
         BlueMouse
     }
-    public TileType[,] tiles; 
+    public enum TurnState
+    {
+        Blue,
+        BlueEnd,
+        Red,
+        RedEnd
+    }
+    public TileType[,] tiles;
+    public TurnState turnState;
     public BoardState()
     {
         PlaceTiles();
         PlaceMice();
+        turnState = Random.Range(0, 2) == 0 ? TurnState.Blue : TurnState.Red;
     }
 
     private void PlaceTiles()

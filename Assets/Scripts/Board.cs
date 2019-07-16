@@ -9,6 +9,8 @@ public class Board : MonoBehaviour
     public GameObject arrow;
     public Mouse blueMousePrefab;
     public Mouse redMousePrefab;
+    public GameObject blueTurnIndicator;
+    public GameObject redTurnIndicator;
     int selectedColumn = 0;
     private BoardState boardState;
     private Mouse[] blueMice;
@@ -50,6 +52,19 @@ public class Board : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        switch (boardState.turnState)
+        {
+            case BoardState.TurnState.Blue:
+            case BoardState.TurnState.BlueEnd:
+                blueTurnIndicator.SetActive(true);
+                redTurnIndicator.SetActive(false);
+                break;
+            case BoardState.TurnState.Red:
+            case BoardState.TurnState.RedEnd:
+                blueTurnIndicator.SetActive(false);
+                redTurnIndicator.SetActive(true);
+                break;
+        }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             selectedColumn++;
