@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
+    public SpriteRenderer spriteRenderer;
     private bool _is_bg = true;
     public bool IsBG
     {
@@ -13,14 +14,9 @@ public class Cell : MonoBehaviour
             if (value == _is_bg)
                 return;
             _is_bg = value;
-            GetComponent<SpriteRenderer>().sprite = value ? bgSprite : fgSprite;
+            spriteRenderer.sprite = value ? bgSprite : fgSprite;
         }
     }
     public Sprite bgSprite;
     public Sprite fgSprite;
-
-    public void SetBG(bool bg)
-    {
-
-    }
 }
