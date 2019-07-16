@@ -20,11 +20,15 @@ public class BoardState
     }
     public TileType[,] tiles;
     public TurnState turnState;
+    public Vector2Int[] blueMicePositions;
+    public Vector2Int[] redMicePositions;
+    public List<int> validTurns;
     public BoardState()
     {
         PlaceTiles();
         PlaceMice();
         turnState = Random.Range(0, 2) == 0 ? TurnState.Blue : TurnState.Red;
+        validTurns = GetValidTurns();
     }
 
     private void PlaceTiles()
@@ -66,6 +70,7 @@ public class BoardState
 
     private void PlaceMice()
     {
+        blueMicePositions = new Vector2Int[12];
         int blue_mice = 0;
         while (blue_mice < 12)
         {
@@ -80,9 +85,11 @@ public class BoardState
                     else break;
                 }
                 tiles[r, c] = TileType.BlueMouse;
+                blueMicePositions[blue_mice] = new Vector2Int(c, r);
                 blue_mice++;
             }
         }
+        redMicePositions = new Vector2Int[12];
         int red_mice = 0;
         while (red_mice < 12)
         {
@@ -97,9 +104,41 @@ public class BoardState
                     else break;
                 }
                 tiles[r, c] = TileType.RedMouse;
+                redMicePositions[red_mice] = new Vector2Int(c, r);
                 red_mice++;
             }
         }
+    }
+
+    List<int> GetValidTurns()
+    {
+        var turns = new HashSet<int>();
+        switch(turnState)
+        {
+            case TurnState.Blue:
+                foreach (var mouse in blueMicePositions)
+                {
+                    if (mouse.x > 0)
+                        turns.Add(mouse.x);
+                }
+                break;
+            case TurnState.Red:
+                foreach (var mouse in redMicePositions)
+                {
+                    if (mouse.x > 0)
+                        turns.Add(mouse.x);
+                }
+                break;
+            case TurnState.BlueEnd:
+                break;
+            case TurnState.RedEnd:
+                break;
+        }
+        var turnsList = new List<int>();
+        foreach (var t in turns)
+            turnsList.Add(t);
+        turnsList.Sort();
+        return turnsList;
     }
 
     bool Fall()

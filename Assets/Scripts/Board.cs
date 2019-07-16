@@ -11,7 +11,7 @@ public class Board : MonoBehaviour
     public Mouse redMousePrefab;
     public GameObject blueTurnIndicator;
     public GameObject redTurnIndicator;
-    int selectedColumn = 0;
+    int selectedTurn = 0;
     private BoardState boardState;
     private Mouse[] blueMice;
     private Mouse[] redMice;
@@ -46,7 +46,8 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        arrow.transform.localPosition = new Vector3(0, -0.65f);
+        selectedTurn = 0;
+        arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
     }
 
     // Update is called once per frame
@@ -67,26 +68,26 @@ public class Board : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            selectedColumn++;
-            selectedColumn %= columns.Length;
+            selectedTurn++;
+            selectedTurn %= boardState.validTurns.Count;
 
-            arrow.transform.localPosition = new Vector3(0.75f * selectedColumn, -0.65f);
+            arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            selectedColumn--;
-            if (selectedColumn < 0)
-                selectedColumn = columns.Length - 1;
+            selectedTurn--;
+            if (selectedTurn < 0)
+                selectedTurn = boardState.validTurns.Count - 1;
 
-            arrow.transform.localPosition = new Vector3(0.75f * selectedColumn, -0.65f);
+            arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            columns[selectedColumn].MoveUp();
+            columns[boardState.validTurns[selectedTurn]].MoveUp();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            columns[selectedColumn].MoveDown();
+            columns[boardState.validTurns[selectedTurn]].MoveDown();
         }
     }
 }
