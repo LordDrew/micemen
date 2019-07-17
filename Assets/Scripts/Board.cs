@@ -64,7 +64,7 @@ public class Board : MonoBehaviour
         {
             possibleTurnsIndicators[boardState.validTurns[i]].SetActive(true);
         }
-        selectedTurn = 0;
+        selectedTurn = boardState.turnState == BoardState.TurnState.Blue ? boardState.validTurns.Count - 1 : 0;
         arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
     }
 
