@@ -23,10 +23,7 @@ public class Board : MonoBehaviour
         boardState = new BoardState();
         columns = new Column[boardState.tiles.GetLength(1)];
         possibleTurnsIndicators = new GameObject[columns.Length];
-        blueMice = new Mouse[12];
-        redMice = new Mouse[12];
-        int blueMiceCount = 0;
-        int redMiceCount = 0;
+
         for (int i = 0; i < columns.Length; i++)
         {
             Column col = columns[i] = Instantiate(columnPrefab, transform);
@@ -35,23 +32,45 @@ public class Board : MonoBehaviour
             col.name = string.Format("col{0}", i);
             var turnIndicator = possibleTurnsIndicators[i] = Instantiate(turnIndicatorPrefab, transform);
             turnIndicator.transform.localPosition = new Vector3(0.75f * i, -0.65f);
-            for (int j = 0; j < col.cells.Length; j++)
-            {
-                if (boardState.tiles[j, i] == BoardState.TileType.BlueMouse)
-                {
-                    var mouse = blueMice[blueMiceCount++] = Instantiate(blueMousePrefab, transform);
-                    mouse.transform.position = col.cells[j].transform.position;
-                    mouse.transform.SetParent(col.cells[j].transform);
-                }
-                else if (boardState.tiles[j, i] == BoardState.TileType.RedMouse)
-                {
-                    var mouse = redMice[redMiceCount++] = Instantiate(redMousePrefab, transform);
-                    mouse.transform.position = col.cells[j].transform.position;
-                    mouse.transform.SetParent(col.cells[j].transform);
-                }
-            }
         }
+        blueMice = new Mouse[12];
+        redMice = new Mouse[12];
+        for (int i = 0; i < blueMice.Length; i++)
+            blueMice[i] = Instantiate(blueMousePrefab, transform);
+        for (int i = 0; i < redMice.Length; i++)
+            redMice[i] = Instantiate(redMousePrefab, transform);
+        MoveMice();
         UpdatePossibleTurns();
+    }
+
+    private void MoveMice()
+    {
+        for (int i = 0; i < blueMice.Length; i++)
+        {
+            ref Mouse mouse = ref blueMice[i];
+            if (boardState.blueMicePositions[i].x < 0)
+            {
+                mouse.gameObject.SetActive(false);
+                continue;
+            }
+            ref var col = ref columns[boardState.blueMicePositions[i].x];
+            ref var cell = ref col.cells[boardState.blueMicePositions[i].y];
+            mouse.transform.position = cell.transform.position;
+            mouse.transform.SetParent(cell.transform);
+        }
+        for (int i = 0; i < redMice.Length; i++)
+        {
+            ref Mouse mouse = ref redMice[i];
+            if (boardState.redMicePositions[i].x < 0)
+            {
+                mouse.gameObject.SetActive(false);
+                continue;
+            }
+            ref var col = ref columns[boardState.redMicePositions[i].x];
+            ref var cell = ref col.cells[boardState.redMicePositions[i].y];
+            mouse.transform.position = cell.transform.position;
+            mouse.transform.SetParent(cell.transform);
+        }
     }
 
     private void UpdatePossibleTurns()
@@ -111,5 +130,7 @@ public class Board : MonoBehaviour
             boardState.MoveDown(boardState.validTurns[selectedTurn]);
             UpdatePossibleTurns();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+            MoveMice();
     }
 }
