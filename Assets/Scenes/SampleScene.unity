@@ -551,6 +551,8 @@ MonoBehaviour:
     type: 3}
   columns: []
   arrow: {fileID: 602335514}
+  turnIndicatorPrefab: {fileID: 6819307726339055916, guid: 441c52e4e77b2464b82dcfc93a0abf72,
+    type: 3}
   blueMousePrefab: {fileID: 7635460191796247044, guid: d10261c280aa47542ac84c22469b8403,
     type: 3}
   redMousePrefab: {fileID: 7389072870034079449, guid: 3db1210f02bda3e40bc5cca5065952c0,

@@ -7,6 +7,7 @@ public class Board : MonoBehaviour
     public Column columnPrefab;
     public Column[] columns;
     public GameObject arrow;
+    public GameObject turnIndicatorPrefab;
     public Mouse blueMousePrefab;
     public Mouse redMousePrefab;
     public GameObject blueTurnIndicator;
@@ -15,11 +16,13 @@ public class Board : MonoBehaviour
     private BoardState boardState;
     private Mouse[] blueMice;
     private Mouse[] redMice;
+    private GameObject[] possibleTurnsIndicators;
     // Start is called before the first frame update
     void Start()
     {
         boardState = new BoardState();
         columns = new Column[boardState.tiles.GetLength(1)];
+        possibleTurnsIndicators = new GameObject[columns.Length];
         blueMice = new Mouse[12];
         redMice = new Mouse[12];
         int blueMiceCount = 0;
@@ -30,6 +33,8 @@ public class Board : MonoBehaviour
             col.SetState(boardState, i);
             col.transform.localPosition = new Vector3(0.75f * i, 0);
             col.name = string.Format("col{0}", i);
+            var turnIndicator = possibleTurnsIndicators[i] = Instantiate(turnIndicatorPrefab, transform);
+            turnIndicator.transform.localPosition = new Vector3(0.75f * i, -0.65f);
             for (int j = 0; j < col.cells.Length; j++)
             {
                 if (boardState.tiles[j, i] == BoardState.TileType.BlueMouse)
@@ -45,6 +50,19 @@ public class Board : MonoBehaviour
                     mouse.transform.SetParent(col.cells[j].transform);
                 }
             }
+        }
+        UpdatePossibleTurns();
+    }
+
+    private void UpdatePossibleTurns()
+    {
+        for (int i = 0; i < possibleTurnsIndicators.Length; i++)
+        {
+            possibleTurnsIndicators[i].SetActive(false);
+        }
+        for (int i = 0; i < boardState.validTurns.Count; i++)
+        {
+            possibleTurnsIndicators[boardState.validTurns[i]].SetActive(true);
         }
         selectedTurn = 0;
         arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
