@@ -102,10 +102,14 @@ public class Board : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             columns[boardState.validTurns[selectedTurn]].MoveUp();
+            boardState.MoveUp(boardState.validTurns[selectedTurn]);
+            UpdatePossibleTurns();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             columns[boardState.validTurns[selectedTurn]].MoveDown();
+            boardState.MoveDown(boardState.validTurns[selectedTurn]);
+            UpdatePossibleTurns();
         }
     }
 }

@@ -141,8 +141,68 @@ public class BoardState
         return turnsList;
     }
 
-    bool Fall()
+    public void MoveUp(int column)
     {
-        return false;
+        TileType tmp = tiles[tiles.GetLength(0) - 1, column];
+        for(int row = tiles.GetLength(0) - 1; row > 0; row--)
+        {
+            tiles[row, column] = tiles[row - 1, column];
+        }
+        tiles[0, column] = tmp;
+        for (int i = 0; i < blueMicePositions.Length; i++)
+        {
+            if (blueMicePositions[i].x == column)
+            {
+                blueMicePositions[i].y += 1;
+                if (blueMicePositions[i].y == tiles.GetLength(0))
+                    blueMicePositions[i].y = 0;
+            }
+        }
+        for (int i = 0; i < redMicePositions.Length; i++)
+        {
+            if (redMicePositions[i].x == column)
+            {
+                redMicePositions[i].y += 1;
+                if (redMicePositions[i].y == tiles.GetLength(0))
+                    redMicePositions[i].y = 0;
+            }
+        }
+        if (turnState == TurnState.Blue)
+            turnState = TurnState.Red;
+        else
+            turnState = TurnState.Blue;
+        validTurns = GetValidTurns();
+    }
+    public void MoveDown(int column)
+    {
+        TileType tmp = tiles[0, column];
+        for (int row = 0; row < tiles.GetLength(0) - 1; row++)
+        {
+            tiles[row, column] = tiles[row + 1, column];
+        }
+        tiles[tiles.GetLength(0) - 1, column] = tmp;
+        for (int i = 0; i < blueMicePositions.Length; i++)
+        {
+            if (blueMicePositions[i].x == column)
+            {
+                blueMicePositions[i].y -= 1;
+                if (blueMicePositions[i].y == -1)
+                    blueMicePositions[i].y = tiles.GetLength(0) - 1;
+            }
+        }
+        for (int i = 0; i < redMicePositions.Length; i++)
+        {
+            if (redMicePositions[i].x == column)
+            {
+                redMicePositions[i].y -= 1;
+                if (redMicePositions[i].y == -1)
+                    redMicePositions[i].y = tiles.GetLength(0) - 1;
+            }
+        }
+        if (turnState == TurnState.Blue)
+            turnState = TurnState.Red;
+        else
+            turnState = TurnState.Blue;
+        validTurns = GetValidTurns();
     }
 }
