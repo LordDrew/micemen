@@ -167,11 +167,7 @@ public class BoardState
                     redMicePositions[i].y = 0;
             }
         }
-        if (turnState == TurnState.Blue)
-            turnState = TurnState.Red;
-        else
-            turnState = TurnState.Blue;
-        validTurns = GetValidTurns();
+        NextTurnState();
     }
     public void MoveDown(int column)
     {
@@ -199,10 +195,30 @@ public class BoardState
                     redMicePositions[i].y = tiles.GetLength(0) - 1;
             }
         }
-        if (turnState == TurnState.Blue)
-            turnState = TurnState.Red;
-        else
-            turnState = TurnState.Blue;
+        NextTurnState();
+    }
+    public void MoveNext()
+    {
+        NextTurnState();
+    }
+    void NextTurnState()
+    {
+        switch (turnState)
+        {
+            case TurnState.Blue:
+                turnState = TurnState.BlueEnd;
+                break;
+            case TurnState.BlueEnd:
+                turnState = TurnState.Red;
+                break;
+            case TurnState.Red:
+                turnState = TurnState.RedEnd;
+                break;
+            case TurnState.RedEnd:
+                turnState = TurnState.Blue;
+                break;
+        }
+
         validTurns = GetValidTurns();
     }
 }

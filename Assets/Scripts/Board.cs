@@ -14,6 +14,7 @@ public class Board : MonoBehaviour
     public GameObject redTurnIndicator;
     int selectedTurn = 0;
     private BoardState boardState;
+    private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;
     private Mouse[] blueMice;
     private Mouse[] redMice;
     private GameObject[] possibleTurnsIndicators;
@@ -75,9 +76,22 @@ public class Board : MonoBehaviour
 
     private void UpdatePossibleTurns()
     {
+        if (boardState.turnState == previousTurnState)
+            return;
+        previousTurnState = boardState.turnState;
+
         for (int i = 0; i < possibleTurnsIndicators.Length; i++)
         {
             possibleTurnsIndicators[i].SetActive(false);
+        }
+        if (boardState.validTurns.Count == 0)
+        {
+            arrow.SetActive(false);
+            return;
+        }
+        else
+        {
+            arrow.SetActive(true);
         }
         for (int i = 0; i < boardState.validTurns.Count; i++)
         {
@@ -103,34 +117,53 @@ public class Board : MonoBehaviour
                 redTurnIndicator.SetActive(true);
                 break;
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            selectedTurn++;
-            selectedTurn %= boardState.validTurns.Count;
 
-            arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            selectedTurn--;
-            if (selectedTurn < 0)
-                selectedTurn = boardState.validTurns.Count - 1;
+        HandleInput();
 
-            arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        UpdatePossibleTurns();
+    }
+
+    private void HandleInput()
+    {
+        switch (boardState.turnState)
         {
-            columns[boardState.validTurns[selectedTurn]].MoveUp();
-            boardState.MoveUp(boardState.validTurns[selectedTurn]);
-            UpdatePossibleTurns();
+
+            case BoardState.TurnState.Blue:
+            case BoardState.TurnState.Red:
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    selectedTurn++;
+                    selectedTurn %= boardState.validTurns.Count;
+
+                    arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+                }
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    selectedTurn--;
+                    if (selectedTurn < 0)
+                        selectedTurn = boardState.validTurns.Count - 1;
+
+                    arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+                }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    columns[boardState.validTurns[selectedTurn]].MoveUp();
+                    boardState.MoveUp(boardState.validTurns[selectedTurn]);
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    columns[boardState.validTurns[selectedTurn]].MoveDown();
+                    boardState.MoveDown(boardState.validTurns[selectedTurn]);
+                }
+                break;
+            case BoardState.TurnState.BlueEnd:
+            case BoardState.TurnState.RedEnd:
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    boardState.MoveNext();
+                    MoveMice();
+                }
+                break;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            columns[boardState.validTurns[selectedTurn]].MoveDown();
-            boardState.MoveDown(boardState.validTurns[selectedTurn]);
-            UpdatePossibleTurns();
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-            MoveMice();
     }
 }
