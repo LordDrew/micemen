@@ -199,8 +199,85 @@ public class BoardState
     }
     public void MoveNext()
     {
+        if (turnState == TurnState.BlueEnd)
+        {
+            if (BlueMiceFall())
+                return;
+            if (RedMiceFall())
+                return;
+        }
+        else
+        {
+            if (RedMiceFall())
+                return;
+            if (BlueMiceFall())
+                return;
+        }
         NextTurnState();
     }
+
+    bool BlueMiceFall()
+    {
+        int selectedMouse = -1;
+        for (int i = 0; i < blueMicePositions.Length; i++)
+        {
+            var x = blueMicePositions[i].x;
+            var y = blueMicePositions[i].y;
+            if (y == 0)
+                continue;
+            if (tiles[y - 1, x] != TileType.Empty)
+                continue;
+            if (selectedMouse >= 0)
+            {
+                if (y > blueMicePositions[selectedMouse].y)
+                    continue;
+                if (y == blueMicePositions[selectedMouse].y && x < blueMicePositions[selectedMouse].x)
+                    continue;
+            }
+
+            selectedMouse = i;
+        }
+        if (selectedMouse >= 0)
+        {
+            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Empty;
+            blueMicePositions[selectedMouse].y -= 1;
+            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.BlueMouse;
+            return true;
+        }
+        return false;
+    }
+
+    bool RedMiceFall()
+    {
+        int selectedMouse = -1;
+        for (int i = 0; i < redMicePositions.Length; i++)
+        {
+            var x = redMicePositions[i].x;
+            var y = redMicePositions[i].y;
+            if (y == 0)
+                continue;
+            if (tiles[y - 1, x] != TileType.Empty)
+                continue;
+            if (selectedMouse >= 0)
+            {
+                if (y > redMicePositions[selectedMouse].y)
+                    continue;
+                if (y == redMicePositions[selectedMouse].y && x > redMicePositions[selectedMouse].x)
+                    continue;
+            }
+
+            selectedMouse = i;
+        }
+        if (selectedMouse >= 0)
+        {
+            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Empty;
+            redMicePositions[selectedMouse].y -= 1;
+            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.RedMouse;
+            return true;
+        }
+        return false;
+    }
+
     void NextTurnState()
     {
         switch (turnState)
