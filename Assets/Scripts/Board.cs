@@ -73,7 +73,15 @@ public class Board : MonoBehaviour
             mouse.transform.SetParent(cell.transform);
         }
     }
-
+    IEnumerator AutoMoveMice()
+    {
+        yield return new WaitForSeconds(0.5f);
+        while (boardState.MoveNext())
+        {
+            yield return new WaitForSeconds(0.25f);
+            MoveMice();
+        }
+    }
     private void UpdatePossibleTurns()
     {
         if (boardState.turnState == previousTurnState)
@@ -149,20 +157,17 @@ public class Board : MonoBehaviour
                 {
                     columns[boardState.validTurns[selectedTurn]].MoveUp();
                     boardState.MoveUp(boardState.validTurns[selectedTurn]);
+                    StartCoroutine(AutoMoveMice());
                 }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     columns[boardState.validTurns[selectedTurn]].MoveDown();
                     boardState.MoveDown(boardState.validTurns[selectedTurn]);
+                    StartCoroutine(AutoMoveMice());
                 }
                 break;
             case BoardState.TurnState.BlueEnd:
             case BoardState.TurnState.RedEnd:
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    boardState.MoveNext();
-                    MoveMice();
-                }
                 break;
         }
     }

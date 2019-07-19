@@ -197,31 +197,32 @@ public class BoardState
         }
         NextTurnState();
     }
-    public void MoveNext()
+    public bool MoveNext()
     {
         if (turnState == TurnState.BlueEnd)
         {
             if (BlueMiceFall())
-                return;
+                return true;
             if (BlueMiceWalk())
-                return;
+                return true;
             if (RedMiceFall())
-                return;
+                return true;
             if (RedMiceWalk())
-                return;
+                return true;
         }
         else
         {
             if (RedMiceFall())
-                return;
+                return true;
             if (RedMiceWalk())
-                return;
+                return true;
             if (BlueMiceFall())
-                return;
+                return true;
             if (BlueMiceWalk())
-                return;
+                return true;
         }
         NextTurnState();
+        return false;
     }
 
     bool BlueMiceFall()
