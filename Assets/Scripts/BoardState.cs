@@ -22,6 +22,8 @@ public class BoardState
     public TurnState turnState;
     public Vector2Int[] blueMicePositions;
     public Vector2Int[] redMicePositions;
+    public int blueScore = 0;
+    public int redScore = 0;
     public List<int> validTurns;
     public BoardState()
     {
@@ -232,8 +234,18 @@ public class BoardState
         {
             var x = blueMicePositions[i].x;
             var y = blueMicePositions[i].y;
-            if (y == 0)
+            if (x < 0)
                 continue;
+            if (y == 0)
+            {
+                if (x < tiles.GetLength(1) - 1)
+                    continue;
+                blueScore++;
+                tiles[blueMicePositions[i].y, blueMicePositions[i].x] = TileType.Empty;
+                blueMicePositions[i].x = -1;
+                blueMicePositions[i].y = -1;
+                return true;
+            }
             if (tiles[y - 1, x] != TileType.Empty)
                 continue;
             if (selectedMouse >= 0)
@@ -263,8 +275,18 @@ public class BoardState
         {
             var x = redMicePositions[i].x;
             var y = redMicePositions[i].y;
-            if (y == 0)
+            if (x < 0)
                 continue;
+            if (y == 0)
+            {
+                if (x > 0)
+                    continue;
+                redScore++;
+                tiles[redMicePositions[i].y, redMicePositions[i].x] = TileType.Empty;
+                redMicePositions[i].x = -1;
+                redMicePositions[i].y = -1;
+                return true;
+            }
             if (tiles[y - 1, x] != TileType.Empty)
                 continue;
             if (selectedMouse >= 0)
@@ -294,6 +316,8 @@ public class BoardState
         {
             var x = blueMicePositions[i].x;
             var y = blueMicePositions[i].y;
+            if (x < 0)
+                continue;
             if (x == tiles.GetLength(1) - 1)
                 continue;
             if (tiles[y, x + 1] != TileType.Empty)
@@ -325,6 +349,8 @@ public class BoardState
         {
             var x = redMicePositions[i].x;
             var y = redMicePositions[i].y;
+            if (x < 0)
+                continue;
             if (x == 0)
                 continue;
             if (tiles[y, x - 1] != TileType.Empty)
