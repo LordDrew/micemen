@@ -27,9 +27,9 @@ public class BoardState
     public List<int> validTurns;
     public BoardState()
     {
+        turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
         PlaceTiles();
         PlaceMice();
-        turnState = Random.Range(0, 2) == 0 ? TurnState.Blue : TurnState.Red;
         validTurns = GetValidTurns();
     }
 
@@ -80,12 +80,6 @@ public class BoardState
             var c = Random.Range(1, 10);
             if (tiles[r, c] == TileType.Empty)
             {
-                while(true)
-                {
-                    if (r > 0 && tiles[r - 1, c] == TileType.Empty) r--;
-                    else if (c < 9 && tiles[r, c + 1] == TileType.Empty) c++;
-                    else break;
-                }
                 tiles[r, c] = TileType.BlueMouse;
                 blueMicePositions[blue_mice] = new Vector2Int(c, r);
                 blue_mice++;
@@ -99,17 +93,12 @@ public class BoardState
             var c = Random.Range(11, 20);
             if (tiles[r, c] == TileType.Empty)
             {
-                while (true)
-                {
-                    if (r > 0 && tiles[r - 1, c] == TileType.Empty) r--;
-                    else if (c > 11 && tiles[r, c - 1] == TileType.Empty) c--;
-                    else break;
-                }
                 tiles[r, c] = TileType.RedMouse;
                 redMicePositions[red_mice] = new Vector2Int(c, r);
                 red_mice++;
             }
         }
+        while (MoveNext());
     }
 
     List<int> GetValidTurns()
