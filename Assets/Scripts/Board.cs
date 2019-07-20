@@ -95,7 +95,6 @@ public class Board : MonoBehaviour
         }
         if (boardState.validTurns.Count == 0)
         {
-            arrow.SetActive(false);
             ban.SetActive(false);
             return;
         }
