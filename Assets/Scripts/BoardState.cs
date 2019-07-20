@@ -25,6 +25,8 @@ public class BoardState
     public int blueScore = 0;
     public int redScore = 0;
     public List<int> validTurns;
+    public int lastTurn = -1;
+    public bool moveBanned = false;
     public BoardState()
     {
         turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
@@ -125,6 +127,13 @@ public class BoardState
             case TurnState.RedEnd:
                 break;
         }
+        if (turns.Count > 1 && turns.Contains(lastTurn))
+        {
+            turns.Remove(lastTurn);
+            moveBanned = true;
+        }
+        else
+            moveBanned = false;
         var turnsList = new List<int>();
         foreach (var t in turns)
             turnsList.Add(t);
@@ -134,6 +143,7 @@ public class BoardState
 
     public void MoveUp(int column)
     {
+        lastTurn = column;
         TileType tmp = tiles[tiles.GetLength(0) - 1, column];
         for(int row = tiles.GetLength(0) - 1; row > 0; row--)
         {
@@ -162,6 +172,7 @@ public class BoardState
     }
     public void MoveDown(int column)
     {
+        lastTurn = column;
         TileType tmp = tiles[0, column];
         for (int row = 0; row < tiles.GetLength(0) - 1; row++)
         {
