@@ -8,6 +8,7 @@ public class Board : MonoBehaviour
     public Column[] columns;
     public GameObject arrow;
     public GameObject turnIndicatorPrefab;
+    public GameObject ban;
     public Mouse blueMousePrefab;
     public Mouse redMousePrefab;
     public GameObject blueTurnIndicator;
@@ -95,6 +96,7 @@ public class Board : MonoBehaviour
         if (boardState.validTurns.Count == 0)
         {
             arrow.SetActive(false);
+            ban.SetActive(false);
             return;
         }
         else
@@ -107,6 +109,16 @@ public class Board : MonoBehaviour
         }
         selectedTurn = boardState.turnState == BoardState.TurnState.Blue ? boardState.validTurns.Count - 1 : 0;
         arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+        if (boardState.moveBanned)
+        {
+            ban.SetActive(true);
+            possibleTurnsIndicators[boardState.lastTurn].SetActive(true);
+            ban.transform.position = possibleTurnsIndicators[boardState.lastTurn].transform.position;
+        }
+        else
+        {
+            ban.SetActive(false);
+        }
     }
 
     // Update is called once per frame
