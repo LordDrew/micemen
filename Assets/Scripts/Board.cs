@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Board : MonoBehaviour
     public Mouse redMousePrefab;
     public GameObject blueTurnIndicator;
     public GameObject redTurnIndicator;
+    public Text blueScore;
+    public Text redScore;
     int selectedTurn = 0;
     private BoardState boardState;
     private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;
@@ -140,6 +143,8 @@ public class Board : MonoBehaviour
         HandleInput();
 
         UpdatePossibleTurns();
+        blueScore.text = boardState.blueScore.ToString();
+        redScore.text = boardState.redScore.ToString();
     }
 
     private void HandleInput()
