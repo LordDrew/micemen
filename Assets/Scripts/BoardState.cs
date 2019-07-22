@@ -15,8 +15,11 @@ public class BoardState
     {
         Blue,
         BlueEnd,
+        BlueVictory,
         Red,
-        RedEnd
+        RedEnd,
+        RedVictory,
+        Draw
     }
     public TileType[,] tiles;
     public TurnState turnState;
@@ -201,6 +204,8 @@ public class BoardState
     }
     public bool MoveNext()
     {
+        if (CheckVictory())
+            return false;
         if (turnState == TurnState.BlueEnd)
         {
             if (BlueMiceFall())
@@ -224,6 +229,21 @@ public class BoardState
                 return true;
         }
         NextTurnState();
+        return false;
+    }
+
+    bool CheckVictory()
+    {
+        if (blueScore == 12)
+        {
+            turnState = TurnState.BlueVictory;
+            return true;
+        }
+        if (redScore == 12)
+        {
+            turnState = TurnState.RedVictory;
+            return true;
+        }
         return false;
     }
 

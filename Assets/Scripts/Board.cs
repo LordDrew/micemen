@@ -16,6 +16,8 @@ public class Board : MonoBehaviour
     public GameObject redTurnIndicator;
     public Text blueScore;
     public Text redScore;
+    public GameObject blueVictory;
+    public GameObject redVictory;
     int selectedTurn = 0;
     private BoardState boardState;
     private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;
@@ -137,6 +139,12 @@ public class Board : MonoBehaviour
             case BoardState.TurnState.RedEnd:
                 blueTurnIndicator.SetActive(false);
                 redTurnIndicator.SetActive(true);
+                break;
+            case BoardState.TurnState.BlueVictory:
+                blueVictory.SetActive(true);
+                break;
+            case BoardState.TurnState.RedVictory:
+                redVictory.SetActive(true);
                 break;
         }
 
