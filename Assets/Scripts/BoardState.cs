@@ -64,7 +64,7 @@ public class BoardState
         for (int c = 2; c < 19; c++)
         {
             if (c == 9) c = 12;
-            int walls_in_col = Random.Range(5, 10);
+            int walls_in_col = Random.Range(5, 8);
             while (walls_in_col > 0)
             {
                 int r = Random.Range(0, 13);
