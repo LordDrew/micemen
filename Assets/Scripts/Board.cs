@@ -46,46 +46,44 @@ public class Board : MonoBehaviour
             blueMice[i] = Instantiate(blueMousePrefab, transform);
         for (int i = 0; i < redMice.Length; i++)
             redMice[i] = Instantiate(redMousePrefab, transform);
-        MoveMice();
+        StartCoroutine(MoveMice(0f));
         UpdatePossibleTurns();
     }
 
-    private void MoveMice()
+    private IEnumerator MoveMice(float time)
     {
         for (int i = 0; i < blueMice.Length; i++)
         {
-            ref Mouse mouse = ref blueMice[i];
             if (boardState.blueMicePositions[i].x < 0)
             {
-                mouse.gameObject.SetActive(false);
+                blueMice[i].gameObject.SetActive(false);
                 continue;
             }
-            ref var col = ref columns[boardState.blueMicePositions[i].x];
-            ref var cell = ref col.cells[boardState.blueMicePositions[i].y];
-            mouse.transform.position = cell.transform.position;
-            mouse.transform.SetParent(cell.transform);
+            Cell cell = columns[boardState.blueMicePositions[i].x]
+                .cells[boardState.blueMicePositions[i].y];
+            if (blueMice[i].transform.parent != cell.transform)
+                yield return blueMice[i].MoveToCell(cell, time);
         }
         for (int i = 0; i < redMice.Length; i++)
         {
-            ref Mouse mouse = ref redMice[i];
             if (boardState.redMicePositions[i].x < 0)
             {
-                mouse.gameObject.SetActive(false);
+                redMice[i].gameObject.SetActive(false);
                 continue;
             }
-            ref var col = ref columns[boardState.redMicePositions[i].x];
-            ref var cell = ref col.cells[boardState.redMicePositions[i].y];
-            mouse.transform.position = cell.transform.position;
-            mouse.transform.SetParent(cell.transform);
+            Cell cell = columns[boardState.redMicePositions[i].x]
+                .cells[boardState.redMicePositions[i].y];
+            if (redMice[i].transform.parent != cell.transform)
+                yield return redMice[i].MoveToCell(cell, time);
         }
     }
+
     IEnumerator AutoMoveMice()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
         while (boardState.MoveNext())
         {
-            yield return new WaitForSeconds(0.25f);
-            MoveMice();
+            yield return StartCoroutine(MoveMice(.5f));
         }
     }
     private void UpdatePossibleTurns()
