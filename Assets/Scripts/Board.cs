@@ -62,7 +62,12 @@ public class Board : MonoBehaviour
             Cell cell = columns[boardState.blueMicePositions[i].x]
                 .cells[boardState.blueMicePositions[i].y];
             if (blueMice[i].transform.parent != cell.transform)
-                yield return blueMice[i].MoveToCell(cell, time);
+            {
+                if (time > 0)
+                    yield return blueMice[i].MoveToCell(cell, time);
+                else
+                    StartCoroutine(blueMice[i].MoveToCell(cell, 0f));
+            }
         }
         for (int i = 0; i < redMice.Length; i++)
         {
@@ -74,7 +79,12 @@ public class Board : MonoBehaviour
             Cell cell = columns[boardState.redMicePositions[i].x]
                 .cells[boardState.redMicePositions[i].y];
             if (redMice[i].transform.parent != cell.transform)
-                yield return redMice[i].MoveToCell(cell, time);
+            {
+                if (time > 0)
+                    yield return redMice[i].MoveToCell(cell, time);
+                else
+                    StartCoroutine(redMice[i].MoveToCell(cell, 0f));
+            }
         }
     }
 
