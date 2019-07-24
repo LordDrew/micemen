@@ -27,13 +27,17 @@ public class Mouse : MonoBehaviour
         var elapsedTime = 0f;
         var startPos = transform.position;
         var targetPos = targetCell.transform.position;
+        if (startPos.y > targetPos.y)
+            targetTime /= 2;
         if (targetPos != startPos)
-        while (elapsedTime < targetTime)
         {
-            //print(elapsedTime);
-            elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPos, targetPos, (elapsedTime / targetTime));
-            yield return null;
+            while (elapsedTime < targetTime)
+            {
+                //print(elapsedTime);
+                elapsedTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPos, targetPos, (elapsedTime / targetTime));
+                yield return null;
+            }
         }
     }
 }
