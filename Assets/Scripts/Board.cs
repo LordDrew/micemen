@@ -156,9 +156,9 @@ public class Board : MonoBehaviour
                 break;
         }
 
+        UpdatePossibleTurns();
         HandleInput();
 
-        UpdatePossibleTurns();
         blueScore.text = boardState.blueScore.ToString();
         redScore.text = boardState.redScore.ToString();
     }
