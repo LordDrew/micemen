@@ -8,8 +8,7 @@ public class BoardState
     {
         Empty,
         Wall,
-        RedMouse,
-        BlueMouse
+        Mouse
     }
     public enum TurnState
     {
@@ -85,7 +84,7 @@ public class BoardState
             var c = Random.Range(1, 10);
             if (tiles[r, c] == TileType.Empty)
             {
-                tiles[r, c] = TileType.BlueMouse;
+                tiles[r, c] = TileType.Mouse;
                 blueMicePositions[blue_mice] = new Vector2Int(c, r);
                 blue_mice++;
             }
@@ -98,7 +97,7 @@ public class BoardState
             var c = Random.Range(11, 20);
             if (tiles[r, c] == TileType.Empty)
             {
-                tiles[r, c] = TileType.RedMouse;
+                tiles[r, c] = TileType.Mouse;
                 redMicePositions[red_mice] = new Vector2Int(c, r);
                 red_mice++;
             }
@@ -282,7 +281,7 @@ public class BoardState
         {
             tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Empty;
             blueMicePositions[selectedMouse].y -= 1;
-            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.BlueMouse;
+            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Mouse;
             return true;
         }
         return false;
@@ -323,7 +322,7 @@ public class BoardState
         {
             tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Empty;
             redMicePositions[selectedMouse].y -= 1;
-            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.RedMouse;
+            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Mouse;
             return true;
         }
         return false;
@@ -356,7 +355,7 @@ public class BoardState
         {
             tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Empty;
             blueMicePositions[selectedMouse].x += 1;
-            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.BlueMouse;
+            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Mouse;
             return true;
         }
         return false;
@@ -389,7 +388,7 @@ public class BoardState
         {
             tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Empty;
             redMicePositions[selectedMouse].x -= 1;
-            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.RedMouse;
+            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Mouse;
             return true;
         }
         return false;
