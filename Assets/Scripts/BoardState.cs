@@ -31,10 +31,13 @@ public class BoardState
     public bool moveBanned = false;
     public BoardState()
     {
-        turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
         PlaceTiles();
-        PlaceMice();
-        validTurns = GetValidTurns();
+        PlaceMice(ref blueMicePositions, 1, 10);
+        PlaceMice(ref redMicePositions, 11, 20);
+
+        // initial mice movement requires starting from end turn state
+        turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
+        while (MoveNext());
     }
 
     private void PlaceTiles()
@@ -74,35 +77,21 @@ public class BoardState
         }
     }
 
-    private void PlaceMice()
+    private void PlaceMice(ref Vector2Int[] micePositions, int minColumn, int maxColumn)
     {
-        blueMicePositions = new Vector2Int[12];
-        int blue_mice = 0;
-        while (blue_mice < 12)
+        micePositions = new Vector2Int[12];
+        int mice = 0;
+        while (mice < 12)
         {
             var r = Random.Range(0, 13);
-            var c = Random.Range(1, 10);
+            var c = Random.Range(minColumn, maxColumn);
             if (tiles[r, c] == TileType.Empty)
             {
                 tiles[r, c] = TileType.Mouse;
-                blueMicePositions[blue_mice] = new Vector2Int(c, r);
-                blue_mice++;
+                micePositions[mice] = new Vector2Int(c, r);
+                mice++;
             }
         }
-        redMicePositions = new Vector2Int[12];
-        int red_mice = 0;
-        while (red_mice < 12)
-        {
-            var r = Random.Range(0, 13);
-            var c = Random.Range(11, 20);
-            if (tiles[r, c] == TileType.Empty)
-            {
-                tiles[r, c] = TileType.Mouse;
-                redMicePositions[red_mice] = new Vector2Int(c, r);
-                red_mice++;
-            }
-        }
-        while (MoveNext());
     }
 
     List<int> GetValidTurns()
