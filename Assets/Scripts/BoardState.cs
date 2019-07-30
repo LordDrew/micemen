@@ -207,22 +207,22 @@ public class BoardState
             return false;
         if (turnState == TurnState.BlueEnd)
         {
-            if (BlueMiceFall())
+            if (MiceFall(blueMicePositions, ref blueScore))
                 return true;
             if (BlueMiceWalk())
                 return true;
-            if (RedMiceFall())
+            if (MiceFall(redMicePositions, ref redScore))
                 return true;
             if (RedMiceWalk())
                 return true;
         }
         else
         {
-            if (RedMiceFall())
+            if (MiceFall(redMicePositions, ref redScore))
                 return true;
             if (RedMiceWalk())
                 return true;
-            if (BlueMiceFall())
+            if (MiceFall(blueMicePositions, ref blueScore))
                 return true;
             if (BlueMiceWalk())
                 return true;
@@ -246,32 +246,32 @@ public class BoardState
         return false;
     }
 
-    bool BlueMiceFall()
+    bool MiceFall(Vector2Int[] micePositions, ref int score)
     {
         int selectedMouse = -1;
-        for (int i = 0; i < blueMicePositions.Length; i++)
+        for (int i = 0; i < micePositions.Length; i++)
         {
-            var x = blueMicePositions[i].x;
-            var y = blueMicePositions[i].y;
+            var x = micePositions[i].x;
+            var y = micePositions[i].y;
             if (x < 0)
                 continue;
             if (y == 0)
             {
-                if (x < tiles.GetLength(1) - 1)
+                if (x > 0 && x < tiles.GetLength(1) - 1)
                     continue;
-                blueScore++;
-                tiles[blueMicePositions[i].y, blueMicePositions[i].x] = TileType.Empty;
-                blueMicePositions[i].x = -1;
-                blueMicePositions[i].y = -1;
+                score++;
+                tiles[y, x] = TileType.Empty;
+                micePositions[i].x = -1;
+                micePositions[i].y = -1;
                 return true;
             }
             if (tiles[y - 1, x] != TileType.Empty)
                 continue;
             if (selectedMouse >= 0)
             {
-                if (y > blueMicePositions[selectedMouse].y)
+                if (y > micePositions[selectedMouse].y)
                     continue;
-                if (y == blueMicePositions[selectedMouse].y && x < blueMicePositions[selectedMouse].x)
+                if (y == micePositions[selectedMouse].y && x > micePositions[selectedMouse].x)
                     continue;
             }
 
@@ -279,50 +279,9 @@ public class BoardState
         }
         if (selectedMouse >= 0)
         {
-            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Empty;
-            blueMicePositions[selectedMouse].y -= 1;
-            tiles[blueMicePositions[selectedMouse].y, blueMicePositions[selectedMouse].x] = TileType.Mouse;
-            return true;
-        }
-        return false;
-    }
-
-    bool RedMiceFall()
-    {
-        int selectedMouse = -1;
-        for (int i = 0; i < redMicePositions.Length; i++)
-        {
-            var x = redMicePositions[i].x;
-            var y = redMicePositions[i].y;
-            if (x < 0)
-                continue;
-            if (y == 0)
-            {
-                if (x > 0)
-                    continue;
-                redScore++;
-                tiles[redMicePositions[i].y, redMicePositions[i].x] = TileType.Empty;
-                redMicePositions[i].x = -1;
-                redMicePositions[i].y = -1;
-                return true;
-            }
-            if (tiles[y - 1, x] != TileType.Empty)
-                continue;
-            if (selectedMouse >= 0)
-            {
-                if (y > redMicePositions[selectedMouse].y)
-                    continue;
-                if (y == redMicePositions[selectedMouse].y && x > redMicePositions[selectedMouse].x)
-                    continue;
-            }
-
-            selectedMouse = i;
-        }
-        if (selectedMouse >= 0)
-        {
-            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Empty;
-            redMicePositions[selectedMouse].y -= 1;
-            tiles[redMicePositions[selectedMouse].y, redMicePositions[selectedMouse].x] = TileType.Mouse;
+            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Empty;
+            micePositions[selectedMouse].y -= 1;
+            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Mouse;
             return true;
         }
         return false;
