@@ -102,7 +102,7 @@ public class BoardState
             case TurnState.Blue:
                 foreach (var mouse in blueMicePositions)
                 {
-                    if (mouse.x > 0 && mouse.x < tiles.GetLength(1) - 1)
+                    if (mouse.x > 0)
                         turns.Add(mouse.x);
                 }
                 break;
@@ -112,10 +112,6 @@ public class BoardState
                     if (mouse.x > 0)
                         turns.Add(mouse.x);
                 }
-                break;
-            case TurnState.BlueEnd:
-                break;
-            case TurnState.RedEnd:
                 break;
         }
         if (turns.Count > 1 && turns.Contains(lastTurn))
