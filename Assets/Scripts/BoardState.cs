@@ -287,7 +287,7 @@ public class BoardState
             {
                 if (y > micePositions[selectedMouse].y)
                     continue;
-                if (y == micePositions[selectedMouse].y && x > micePositions[selectedMouse].x)
+                if (y == micePositions[selectedMouse].y && direction * x < direction * micePositions[selectedMouse].x)
                     continue;
             }
 
