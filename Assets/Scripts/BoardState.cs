@@ -20,10 +20,50 @@ public class BoardState
         RedVictory,
         Draw
     }
+    public interface IMouse
+    {
+        int X { get; set; }
+        int Y { get; set; }
+        int XForward { get; }
+        bool IsActive { get; set; }
+        bool IsCloserToFinishThan(IMouse other);
+    }
+    class BlueMouse : IMouse
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int XForward => X + 1;
+        public bool IsActive { get; set; } = true;
+
+        public bool IsCloserToFinishThan(IMouse other)
+        {
+            if (Y < other.Y)
+                return true;
+            if (Y > other.Y)
+                return false;
+            return X > other.X;
+        }
+    }
+    class RedMouse : IMouse
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int XForward => X - 1;
+        public bool IsActive { get; set; } = true;
+
+        public bool IsCloserToFinishThan(IMouse other)
+        {
+            if (Y < other.Y)
+                return true;
+            if (Y > other.Y)
+                return false;
+            return X < other.X;
+        }
+    }
     public TileType[,] tiles;
     public TurnState turnState;
-    public Vector2Int[] blueMicePositions;
-    public Vector2Int[] redMicePositions;
+    public IMouse[] blueMice = new BlueMouse[12];
+    public IMouse[] redMice = new RedMouse[12];
     public int blueScore = 0;
     public int redScore = 0;
     public List<int> validTurns;
@@ -32,8 +72,12 @@ public class BoardState
     public BoardState()
     {
         PlaceTiles();
-        PlaceMice(ref blueMicePositions, 1, 10);
-        PlaceMice(ref redMicePositions, 11, 20);
+        for (int i = 0; i < blueMice.Length; i++)
+            blueMice[i] = new BlueMouse();
+        for (int i = 0; i < redMice.Length; i++)
+            redMice[i] = new RedMouse();
+        PlaceMice(blueMice, 1, 10);
+        PlaceMice(redMice, 11, 20);
 
         // initial mice movement requires starting from end turn state
         turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
@@ -77,19 +121,19 @@ public class BoardState
         }
     }
 
-    private void PlaceMice(ref Vector2Int[] micePositions, int minColumn, int maxColumn)
+    private void PlaceMice(IMouse[] mice, int minColumn, int maxColumn)
     {
-        micePositions = new Vector2Int[12];
-        int mice = 0;
-        while (mice < 12)
+        int mouse = 0;
+        while (mouse < mice.Length)
         {
             var r = Random.Range(0, 13);
             var c = Random.Range(minColumn, maxColumn);
             if (tiles[r, c] == TileType.Empty)
             {
                 tiles[r, c] = TileType.Mouse;
-                micePositions[mice] = new Vector2Int(c, r);
-                mice++;
+                mice[mouse].X = c;
+                mice[mouse].Y = r;
+                mouse++;
             }
         }
     }
@@ -100,17 +144,17 @@ public class BoardState
         switch(turnState)
         {
             case TurnState.Blue:
-                foreach (var mouse in blueMicePositions)
+                foreach (var mouse in blueMice)
                 {
-                    if (mouse.x > 0)
-                        turns.Add(mouse.x);
+                    if (mouse.IsActive)
+                        turns.Add(mouse.X);
                 }
                 break;
             case TurnState.Red:
-                foreach (var mouse in redMicePositions)
+                foreach (var mouse in redMice)
                 {
-                    if (mouse.x > 0)
-                        turns.Add(mouse.x);
+                    if (mouse.IsActive)
+                        turns.Add(mouse.X);
                 }
                 break;
         }
@@ -137,22 +181,22 @@ public class BoardState
             tiles[row, column] = tiles[row - 1, column];
         }
         tiles[0, column] = tmp;
-        for (int i = 0; i < blueMicePositions.Length; i++)
+        for (int i = 0; i < blueMice.Length; i++)
         {
-            if (blueMicePositions[i].x == column)
+            if (blueMice[i].X == column)
             {
-                blueMicePositions[i].y += 1;
-                if (blueMicePositions[i].y == tiles.GetLength(0))
-                    blueMicePositions[i].y = 0;
+                blueMice[i].Y += 1;
+                if (blueMice[i].Y == tiles.GetLength(0))
+                    blueMice[i].Y = 0;
             }
         }
-        for (int i = 0; i < redMicePositions.Length; i++)
+        for (int i = 0; i < redMice.Length; i++)
         {
-            if (redMicePositions[i].x == column)
+            if (redMice[i].X == column)
             {
-                redMicePositions[i].y += 1;
-                if (redMicePositions[i].y == tiles.GetLength(0))
-                    redMicePositions[i].y = 0;
+                redMice[i].Y += 1;
+                if (redMice[i].Y == tiles.GetLength(0))
+                    redMice[i].Y = 0;
             }
         }
         NextTurnState();
@@ -166,22 +210,22 @@ public class BoardState
             tiles[row, column] = tiles[row + 1, column];
         }
         tiles[tiles.GetLength(0) - 1, column] = tmp;
-        for (int i = 0; i < blueMicePositions.Length; i++)
+        for (int i = 0; i < blueMice.Length; i++)
         {
-            if (blueMicePositions[i].x == column)
+            if (blueMice[i].X == column)
             {
-                blueMicePositions[i].y -= 1;
-                if (blueMicePositions[i].y == -1)
-                    blueMicePositions[i].y = tiles.GetLength(0) - 1;
+                blueMice[i].Y -= 1;
+                if (blueMice[i].Y == -1)
+                    blueMice[i].Y = tiles.GetLength(0) - 1;
             }
         }
-        for (int i = 0; i < redMicePositions.Length; i++)
+        for (int i = 0; i < redMice.Length; i++)
         {
-            if (redMicePositions[i].x == column)
+            if (redMice[i].X == column)
             {
-                redMicePositions[i].y -= 1;
-                if (redMicePositions[i].y == -1)
-                    redMicePositions[i].y = tiles.GetLength(0) - 1;
+                redMice[i].Y -= 1;
+                if (redMice[i].Y == -1)
+                    redMice[i].Y = tiles.GetLength(0) - 1;
             }
         }
         NextTurnState();
@@ -192,24 +236,24 @@ public class BoardState
             return false;
         if (turnState == TurnState.BlueEnd)
         {
-            if (MiceFall(blueMicePositions, ref blueScore))
+            if (MiceFall(blueMice, ref blueScore))
                 return true;
-            if (MiceWalk(blueMicePositions, +1))
+            if (MiceWalk(blueMice))
                 return true;
-            if (MiceFall(redMicePositions, ref redScore))
+            if (MiceFall(redMice, ref redScore))
                 return true;
-            if (MiceWalk(redMicePositions, -1))
+            if (MiceWalk(redMice))
                 return true;
         }
         else
         {
-            if (MiceFall(redMicePositions, ref redScore))
+            if (MiceFall(redMice, ref redScore))
                 return true;
-            if (MiceWalk(redMicePositions, -1))
+            if (MiceWalk(redMice))
                 return true;
-            if (MiceFall(blueMicePositions, ref blueScore))
+            if (MiceFall(blueMice, ref blueScore))
                 return true;
-            if (MiceWalk(blueMicePositions, +1))
+            if (MiceWalk(blueMice))
                 return true;
         }
         NextTurnState();
@@ -231,73 +275,60 @@ public class BoardState
         return false;
     }
 
-    bool MiceFall(Vector2Int[] micePositions, ref int score)
+    bool MiceFall(IMouse[] mice, ref int score)
     {
-        int selectedMouse = -1;
-        for (int i = 0; i < micePositions.Length; i++)
+        IMouse selectedMouse = null;
+        for (int i = 0; i < mice.Length; i++)
         {
-            var x = micePositions[i].x;
-            var y = micePositions[i].y;
-            if (x < 0)
+            IMouse mouse = mice[i];
+            if (!mouse.IsActive)
                 continue;
-            if (y == 0)
+            if (mouse.Y == 0)
             {
-                if (x > 0 && x < tiles.GetLength(1) - 1)
+                if (mouse.X > 0 && mouse.X < tiles.GetLength(1) - 1)
                     continue;
                 score++;
-                tiles[y, x] = TileType.Empty;
-                micePositions[i].x = -1;
-                micePositions[i].y = -1;
+                tiles[mouse.Y, mouse.X] = TileType.Empty;
+                mice[i].IsActive = false;
                 return true;
             }
-            if (tiles[y - 1, x] != TileType.Empty)
+            if (tiles[mouse.Y - 1, mouse.X] != TileType.Empty)
                 continue;
-            if (selectedMouse >= 0)
-            {
-                if (y > micePositions[selectedMouse].y)
-                    continue;
-                if (y == micePositions[selectedMouse].y && x > micePositions[selectedMouse].x)
-                    continue;
-            }
+            if (selectedMouse != null && selectedMouse.IsCloserToFinishThan(mouse))
+                continue;
 
-            selectedMouse = i;
+            selectedMouse = mouse;
         }
-        if (selectedMouse >= 0)
+        if (selectedMouse != null)
         {
-            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Empty;
-            micePositions[selectedMouse].y -= 1;
-            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Mouse;
+            tiles[selectedMouse.Y, selectedMouse.X] = TileType.Empty;
+            selectedMouse.Y -= 1;
+            tiles[selectedMouse.Y, selectedMouse.X] = TileType.Mouse;
             return true;
         }
         return false;
     }
 
-    bool MiceWalk(Vector2Int[] micePositions, int direction)
+    bool MiceWalk(IMouse[] mice)
     {
-        int selectedMouse = -1;
-        for (int i = 0; i < micePositions.Length; i++)
+        IMouse selectedMouse = null;
+        for (int i = 0; i < mice.Length; i++)
         {
-            var x = micePositions[i].x;
-            var y = micePositions[i].y;
-            if (x < 0)
+            IMouse mouse = mice[i];
+            if (!mouse.IsActive)
                 continue;
-            if (tiles[y, x + direction] != TileType.Empty)
+            if (tiles[mouse.Y, mouse.XForward] != TileType.Empty)
                 continue;
-            if (selectedMouse >= 0)
-            {
-                if (y > micePositions[selectedMouse].y)
-                    continue;
-                if (y == micePositions[selectedMouse].y && direction * x < direction * micePositions[selectedMouse].x)
-                    continue;
-            }
+            if (selectedMouse != null && selectedMouse.IsCloserToFinishThan(mouse))
+                continue;
 
-            selectedMouse = i;
+            selectedMouse = mouse;
         }
-        if (selectedMouse >= 0)
+        if (selectedMouse != null)
         {
-            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Empty;
-            micePositions[selectedMouse].x += direction;
-            tiles[micePositions[selectedMouse].y, micePositions[selectedMouse].x] = TileType.Mouse;
+            tiles[selectedMouse.Y, selectedMouse.X] = TileType.Empty;
+            selectedMouse.X = selectedMouse.XForward;
+            tiles[selectedMouse.Y, selectedMouse.X] = TileType.Mouse;
             return true;
         }
         return false;

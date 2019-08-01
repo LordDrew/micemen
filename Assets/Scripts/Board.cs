@@ -54,13 +54,13 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i < blueMice.Length; i++)
         {
-            if (boardState.blueMicePositions[i].x < 0)
+            if (!boardState.blueMice[i].IsActive)
             {
                 blueMice[i].gameObject.SetActive(false);
                 continue;
             }
-            Cell cell = columns[boardState.blueMicePositions[i].x]
-                .cells[boardState.blueMicePositions[i].y];
+            Cell cell = columns[boardState.blueMice[i].X]
+                .cells[boardState.blueMice[i].Y];
             if (blueMice[i].transform.parent != cell.transform)
             {
                 if (time > 0)
@@ -71,13 +71,13 @@ public class Board : MonoBehaviour
         }
         for (int i = 0; i < redMice.Length; i++)
         {
-            if (boardState.redMicePositions[i].x < 0)
+            if (!boardState.redMice[i].IsActive)
             {
                 redMice[i].gameObject.SetActive(false);
                 continue;
             }
-            Cell cell = columns[boardState.redMicePositions[i].x]
-                .cells[boardState.redMicePositions[i].y];
+            Cell cell = columns[boardState.redMice[i].X]
+                .cells[boardState.redMice[i].Y];
             if (redMice[i].transform.parent != cell.transform)
             {
                 if (time > 0)
