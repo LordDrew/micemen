@@ -9,6 +9,10 @@ public class Mouse : MonoBehaviour
         Blue,
         Red
     }
+    private void Start()
+    {
+        GetComponent<Animator>().SetFloat("Offset", Random.Range(0.0f, 1.0f));
+    }
     public Faction faction;
     public IEnumerator MoveToCell(Cell targetCell, float targetTime)
     {

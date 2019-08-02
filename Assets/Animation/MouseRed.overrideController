@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MouseRed
+  m_Controller: {fileID: 9100000, guid: 91d98112b5120d542a0ba25c8cb71989, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: ae926a9564facab4288fd50952912461, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 89f08145cf9221143982974040206dd2, type: 2}
