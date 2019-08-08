@@ -163,6 +163,33 @@ public class Board : MonoBehaviour
         redScore.text = boardState.redScore.ToString();
     }
 
+    public void MoveLeft()
+    {
+        selectedTurn--;
+        if (selectedTurn < 0)
+            selectedTurn = boardState.validTurns.Count - 1;
+
+        arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+    }
+    public void MoveRight()
+    {
+        selectedTurn++;
+        selectedTurn %= boardState.validTurns.Count;
+
+        arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+    }
+    public void MoveUp()
+    {
+        columns[boardState.validTurns[selectedTurn]].MoveUp();
+        boardState.MoveUp(boardState.validTurns[selectedTurn]);
+        StartCoroutine(AutoMoveMice());
+    }
+    public void MoveDown()
+    {
+        columns[boardState.validTurns[selectedTurn]].MoveDown();
+        boardState.MoveDown(boardState.validTurns[selectedTurn]);
+        StartCoroutine(AutoMoveMice());
+    }
     private void HandleInput()
     {
         switch (boardState.turnState)
@@ -172,30 +199,19 @@ public class Board : MonoBehaviour
             case BoardState.TurnState.Red:
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    selectedTurn++;
-                    selectedTurn %= boardState.validTurns.Count;
-
-                    arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+                    MoveRight();
                 }
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    selectedTurn--;
-                    if (selectedTurn < 0)
-                        selectedTurn = boardState.validTurns.Count - 1;
-
-                    arrow.transform.localPosition = new Vector3(0.75f * boardState.validTurns[selectedTurn], -0.65f);
+                    MoveLeft();
                 }
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    columns[boardState.validTurns[selectedTurn]].MoveUp();
-                    boardState.MoveUp(boardState.validTurns[selectedTurn]);
-                    StartCoroutine(AutoMoveMice());
+                    MoveUp();
                 }
                 else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    columns[boardState.validTurns[selectedTurn]].MoveDown();
-                    boardState.MoveDown(boardState.validTurns[selectedTurn]);
-                    StartCoroutine(AutoMoveMice());
+                    MoveDown();
                 }
                 break;
             case BoardState.TurnState.BlueEnd:
