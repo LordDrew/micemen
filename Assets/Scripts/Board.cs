@@ -19,7 +19,7 @@ public class Board : MonoBehaviour
     public GameObject blueVictory;
     public GameObject redVictory;
     int selectedTurn = 0;
-    private BoardState boardState;
+    public BoardState boardState;
     private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;
     private Mouse[] blueMice;
     private Mouse[] redMice;
@@ -157,7 +157,6 @@ public class Board : MonoBehaviour
         }
 
         UpdatePossibleTurns();
-        HandleInput();
 
         blueScore.text = boardState.blueScore.ToString();
         redScore.text = boardState.redScore.ToString();
@@ -189,34 +188,5 @@ public class Board : MonoBehaviour
         columns[boardState.validTurns[selectedTurn]].MoveDown();
         boardState.MoveDown(boardState.validTurns[selectedTurn]);
         StartCoroutine(AutoMoveMice());
-    }
-    private void HandleInput()
-    {
-        switch (boardState.turnState)
-        {
-
-            case BoardState.TurnState.Blue:
-            case BoardState.TurnState.Red:
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    MoveRight();
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    MoveLeft();
-                }
-                if (Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    MoveUp();
-                }
-                else if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    MoveDown();
-                }
-                break;
-            case BoardState.TurnState.BlueEnd:
-            case BoardState.TurnState.RedEnd:
-                break;
-        }
     }
 }
