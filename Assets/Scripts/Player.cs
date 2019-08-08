@@ -9,7 +9,13 @@ public class Player : MonoBehaviour
         Blue,
         Red,
     }
+    public enum Type
+    {
+        Human,
+        AlwaysDownAI
+    }
     public Team team;
+    public Type type;
     private Board board;
     private BoardState.TurnState neededTurnState;
     // Start is called before the first frame update
@@ -25,9 +31,22 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (board.boardState.turnState != neededTurnState)
+        if (board.boardState.turnState != neededTurnState || !board.readyForInput)
             return;
 
+        switch (type)
+        {
+            case Type.Human:
+                HumanInput();
+                break;
+            case Type.AlwaysDownAI:
+                AlwaysDownAIInput();
+                break;
+        }
+    }
+
+    void HumanInput()
+    {
         if (Input.GetKeyDown(KeyCode.RightArrow))
             board.MoveRight();
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -36,5 +55,10 @@ public class Player : MonoBehaviour
             board.MoveUp();
         else if (Input.GetKeyDown(KeyCode.DownArrow))
             board.MoveDown();
+    }
+
+    void AlwaysDownAIInput()
+    {
+        board.MoveDown();
     }
 }

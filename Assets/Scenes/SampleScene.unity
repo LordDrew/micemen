@@ -1376,6 +1376,7 @@ MonoBehaviour:
   redScore: {fileID: 1527892901}
   blueVictory: {fileID: 878351556}
   redVictory: {fileID: 1131799762}
+  readyForInput: 0
 --- !u!4 &2078809549
 Transform:
   m_ObjectHideFlags: 0
@@ -1405,6 +1406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  type: 1
 --- !u!114 &2078809551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1418,6 +1420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  type: 0
 --- !u!1 &2132605578
 GameObject:
   m_ObjectHideFlags: 0

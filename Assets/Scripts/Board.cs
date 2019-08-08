@@ -20,6 +20,7 @@ public class Board : MonoBehaviour
     public GameObject redVictory;
     int selectedTurn = 0;
     public BoardState boardState;
+    public bool readyForInput;
     private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;
     private Mouse[] blueMice;
     private Mouse[] redMice;
@@ -48,6 +49,8 @@ public class Board : MonoBehaviour
             redMice[i] = Instantiate(redMousePrefab, transform);
         StartCoroutine(MoveMice(0f));
         UpdatePossibleTurns();
+
+        readyForInput = true;
     }
 
     private IEnumerator MoveMice(float time)
@@ -131,6 +134,8 @@ public class Board : MonoBehaviour
         {
             ban.SetActive(false);
         }
+
+        readyForInput = true;
     }
 
     // Update is called once per frame
@@ -179,12 +184,14 @@ public class Board : MonoBehaviour
     }
     public void MoveUp()
     {
+        readyForInput = false;
         columns[boardState.validTurns[selectedTurn]].MoveUp();
         boardState.MoveUp(boardState.validTurns[selectedTurn]);
         StartCoroutine(AutoMoveMice());
     }
     public void MoveDown()
     {
+        readyForInput = false;
         columns[boardState.validTurns[selectedTurn]].MoveDown();
         boardState.MoveDown(boardState.validTurns[selectedTurn]);
         StartCoroutine(AutoMoveMice());
