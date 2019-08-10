@@ -1376,6 +1376,7 @@ MonoBehaviour:
   redScore: {fileID: 1527892901}
   blueVictory: {fileID: 878351556}
   redVictory: {fileID: 1131799762}
+  selectedTurn: 0
   readyForInput: 0
 --- !u!4 &2078809549
 Transform:

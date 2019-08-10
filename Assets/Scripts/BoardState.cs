@@ -83,7 +83,33 @@ public class BoardState
         turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
         while (MoveNext());
     }
-
+    public BoardState(BoardState other)
+    {
+        tiles = (TileType[,])other.tiles.Clone();
+        turnState = other.turnState;
+        for (int i = 0; i < blueMice.Length; i++)
+        {
+            blueMice[i] = new BlueMouse
+            {
+                X = other.blueMice[i].X,
+                Y = other.blueMice[i].Y,
+                IsActive = other.blueMice[i].IsActive
+            };
+        }
+        for (int i = 0; i < redMice.Length; i++)
+        {
+            redMice[i] = new RedMouse()
+            {
+                X = other.redMice[i].X,
+                Y = other.redMice[i].Y,
+                IsActive = other.redMice[i].IsActive
+            };
+        }
+        blueScore = other.blueScore;
+        redScore = other.redScore;
+        lastTurn = other.lastTurn;
+        validTurns = GetValidTurns();
+    }
     private void PlaceTiles()
     {
         tiles = new TileType[13, 21];

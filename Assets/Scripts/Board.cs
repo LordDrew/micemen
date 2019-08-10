@@ -18,7 +18,7 @@ public class Board : MonoBehaviour
     public Text redScore;
     public GameObject blueVictory;
     public GameObject redVictory;
-    int selectedTurn = 0;
+    public int selectedTurn = 0;
     public BoardState boardState;
     public bool readyForInput;
     private BoardState.TurnState previousTurnState = BoardState.TurnState.BlueEnd;

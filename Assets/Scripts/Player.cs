@@ -58,22 +58,76 @@ public class Player : MonoBehaviour
             board.MoveDown();
     }
 
+    int TryMove(int move, bool up)
+    {
+        BoardState bs = new BoardState(board.boardState);
+        if (up)
+            bs.MoveUp(move);
+        else
+            bs.MoveDown(move);
+        while (bs.MoveNext()) ;
+
+        if (team == Team.Blue)
+        {
+            int fieldWidth = bs.tiles.GetLength(1);
+            int blueDistance = 0;
+            foreach (var mouse in bs.blueMice)
+            {
+                if (mouse.IsActive)
+                    blueDistance += (fieldWidth - mouse.X) * (fieldWidth - mouse.X);
+            }
+            return blueDistance;
+        }
+        else
+        {
+            int redDistance = 0;
+            foreach (var mouse in bs.redMice)
+            {
+                if (mouse.IsActive)
+                    redDistance += mouse.X * mouse.X;
+            }
+            return redDistance;
+        }
+    }
+
     IEnumerator EasyAIInput()
     {
         thinking = true;
         yield return new WaitForSeconds(0.5f);
-        var move = Random.Range(0, board.boardState.validTurns.Count);
-        bool left = move < board.boardState.validTurns.Count / 2f;
-        move /= 2;
-        for (int m = 0; m < move; m++)
+
+        int bestScore = int.MaxValue;
+        int bestMoveIndex = 0;
+        bool bestMoveIsUp = false;
+        for(int m = 0; m < board.boardState.validTurns.Count; m++)
         {
-            if (left)
+            var score = TryMove(board.boardState.validTurns[m], false);
+            if(score < bestScore)
+            {
+                bestScore = score;
+                bestMoveIsUp = false;
+                bestMoveIndex = m;
+            }
+            score = TryMove(board.boardState.validTurns[m], true);
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestMoveIsUp = true;
+                bestMoveIndex = m;
+            }
+        }
+        while (board.selectedTurn != bestMoveIndex)
+        {
+            if (team == Team.Blue)
                 board.MoveLeft();
             else
                 board.MoveRight();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.3f);
         }
-        board.MoveDown();
+
+        if (bestMoveIsUp)
+            board.MoveUp();
+        else
+            board.MoveDown();
         thinking = false;
     }
 }
