@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    Vector2 mouseDownPosition = Vector2.zero;
+    float waitTime;
+    bool movedHorizontally;
     void HumanInput()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -56,6 +59,59 @@ public class Player : MonoBehaviour
             board.MoveUp();
         else if (Input.GetKeyDown(KeyCode.DownArrow))
             board.MoveDown();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            mouseDownPosition = Input.mousePosition;
+            movedHorizontally = false;
+            waitTime = 0;
+        }
+        if (Input.GetMouseButton(0))
+        {
+            var delta = (Vector2)Input.mousePosition - mouseDownPosition;
+            if (delta.magnitude > 100)
+            {
+                if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y) * 2)
+                {
+                    if (waitTime > 0)
+                        waitTime -= Time.deltaTime;
+                    else
+                    {
+                        if (delta.x < 0)
+                        {
+                            movedHorizontally = true;
+                            waitTime = 0.3f;
+                            board.MoveLeft();
+                        }
+                        else
+                        {
+                            movedHorizontally = true;
+                            waitTime = 0.3f;
+                            board.MoveRight();
+                        }
+                    }
+                }
+                else
+                    waitTime = 0;
+            }
+            else
+                waitTime = 0;
+        }
+        if (Input.GetMouseButtonUp(0) && !movedHorizontally)
+        {
+            var delta = (Vector2)Input.mousePosition - mouseDownPosition;
+            Debug.Log(delta);
+            if (delta.magnitude > 100)
+            {
+                if (Mathf.Abs(delta.y) > Mathf.Abs(delta.x) * 2)
+                {
+                    if (delta.y < 0)
+                        board.MoveDown();
+                    else
+                        board.MoveUp();
+                }
+            }
+        }
     }
 
     int TryMove(int move, bool up)
