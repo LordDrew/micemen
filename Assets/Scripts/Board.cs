@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Board : MonoBehaviour
@@ -155,9 +156,17 @@ public class Board : MonoBehaviour
                 break;
             case BoardState.TurnState.BlueVictory:
                 blueVictory.SetActive(true);
+                if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
                 break;
             case BoardState.TurnState.RedVictory:
                 redVictory.SetActive(true);
+                if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
                 break;
         }
 
