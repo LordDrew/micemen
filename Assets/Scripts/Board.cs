@@ -158,14 +158,14 @@ public class Board : MonoBehaviour
                 blueVictory.SetActive(true);
                 if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
                 {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
                 }
                 break;
             case BoardState.TurnState.RedVictory:
                 redVictory.SetActive(true);
                 if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
                 {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
                 }
                 break;
         }

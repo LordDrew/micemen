@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  type: 1
+  type: 0
 --- !u!114 &2078809551
 MonoBehaviour:
   m_ObjectHideFlags: 0

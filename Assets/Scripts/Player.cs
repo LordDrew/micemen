@@ -22,11 +22,27 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        int playerType;
         board = GetComponent<Board>();
         if (team == Team.Blue)
+        {
             neededTurnState = BoardState.TurnState.Blue;
+            playerType = PlayerPrefs.GetInt(Settings.bluePlayerKey, 0);
+        }
         else
+        {
             neededTurnState = BoardState.TurnState.Red;
+            playerType = PlayerPrefs.GetInt(Settings.redPlayerKey, 1);
+        }
+        switch (playerType)
+        {
+            case 0:
+                type = Type.Human;
+                break;
+            case 1:
+                type = Type.EasyAI;
+                break;
+        }
     }
 
     // Update is called once per frame
