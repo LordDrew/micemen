@@ -71,13 +71,22 @@ public class BoardState
     public bool moveBanned = false;
     public BoardState()
     {
-        PlaceTiles();
+        bool fieldSymmetry = PlayerPrefs.GetInt(Settings.symmetricFildKey, 0) == 1;
+        bool offsetSymmetry = PlayerPrefs.GetInt(Settings.symmetricTileOffsetKey, 0) == 1;
+        bool miceSymmetry = PlayerPrefs.GetInt(Settings.symmetricMicePositionKey, 0) == 1;
+        offsetSymmetry = offsetSymmetry && fieldSymmetry;
+        miceSymmetry = miceSymmetry && offsetSymmetry;
+
         for (int i = 0; i < blueMice.Length; i++)
             blueMice[i] = new BlueMouse();
         for (int i = 0; i < redMice.Length; i++)
             redMice[i] = new RedMouse();
+        PlaceTiles(fieldSymmetry, offsetSymmetry);
         PlaceMice(blueMice, 1, 10);
-        PlaceMice(redMice, 11, 20);
+        if (!miceSymmetry)
+            PlaceMice(redMice, 11, 20);
+        else
+            PlaceMiceSymmetric(blueMice, redMice);
 
         // initial mice movement requires starting from end turn state
         turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
@@ -110,7 +119,7 @@ public class BoardState
         lastTurn = other.lastTurn;
         validTurns = GetValidTurns();
     }
-    private void PlaceTiles()
+    private void PlaceTiles(bool symmetricField, bool symmetricOffset)
     {
         tiles = new TileType[13, 21];
         for (var r = 0; r < tiles.GetLength(0); r++)
@@ -133,16 +142,44 @@ public class BoardState
                 }
             }
         }
-        for (int c = 2; c < 19; c++)
+        if (symmetricField)
         {
-            if (c == 9) c = 12;
-            int walls_in_col = Random.Range(5, 8);
-            while (walls_in_col > 0)
+            for (int c = 2; c < 9; c++)
             {
-                int r = Random.Range(0, 13);
-                if (tiles[r, c] == TileType.Wall) continue;
-                tiles[r, c] = TileType.Wall;
-                walls_in_col--;
+                int walls_in_col = Random.Range(5, 8);
+                while (walls_in_col > 0)
+                {
+                    int r = Random.Range(0, 13);
+                    if (tiles[r, c] == TileType.Wall) continue;
+                    tiles[r, c] = TileType.Wall;
+                    tiles[r, tiles.GetLength(1) - c - 1] = TileType.Wall;
+                    walls_in_col--;
+                }
+            }
+        }
+        else
+        {
+            for (int c = 2; c < 19; c++)
+            {
+                if (c == 9) c = 12;
+                int walls_in_col = Random.Range(5, 8);
+                while (walls_in_col > 0)
+                {
+                    int r = Random.Range(0, 13);
+                    if (tiles[r, c] == TileType.Wall) continue;
+                    tiles[r, c] = TileType.Wall;
+                    walls_in_col--;
+                }
+            }
+        }
+        if (!symmetricOffset)
+        {
+            for (int c = 2; c < 19; c++)
+            {
+                if (c == 9) c = 12;
+                int offset = Random.Range(0, 13);
+                for (int o = 0; o < offset; o++)
+                    MoveDown(c);
             }
         }
     }
@@ -161,6 +198,15 @@ public class BoardState
                 mice[mouse].Y = r;
                 mouse++;
             }
+        }
+    }
+    private void PlaceMiceSymmetric(IMouse[] placedMice, IMouse[] miceToPlace)
+    {
+        for (int i = 0; i < placedMice.Length; i++)
+        {
+            miceToPlace[i].Y = placedMice[i].Y;
+            miceToPlace[i].X = tiles.GetLength(1) - 1 - placedMice[i].X;
+            tiles[miceToPlace[i].Y, miceToPlace[i].X] = TileType.Mouse;
         }
     }
 
