@@ -2486,6 +2486,10 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Android (Easy)
       m_Image: {fileID: 0}
+    - m_Text: Android (Medium)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Hard)
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3249,6 +3253,10 @@ MonoBehaviour:
     - m_Text: Human
       m_Image: {fileID: 0}
     - m_Text: Android (Easy)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Medium)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Hard)
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

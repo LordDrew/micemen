@@ -12,12 +12,15 @@ public class Player : MonoBehaviour
     public enum Type
     {
         Human,
-        EasyAI
+        EasyAI,
+        MediumAI,
+        HardAI
     }
     public Team team;
     public Type type;
     private Board board;
-    private BoardState.TurnState neededTurnState;
+    private BoardState.TurnState activeTurnState;
+    private BoardState.TurnState targetTurnState;
     private bool thinking = false;
     // Start is called before the first frame update
     void Start()
@@ -26,12 +29,14 @@ public class Player : MonoBehaviour
         board = GetComponent<Board>();
         if (team == Team.Blue)
         {
-            neededTurnState = BoardState.TurnState.Blue;
+            activeTurnState = BoardState.TurnState.Blue;
+            targetTurnState = BoardState.TurnState.BlueVictory;
             playerType = PlayerPrefs.GetInt(Settings.bluePlayerKey, 0);
         }
         else
         {
-            neededTurnState = BoardState.TurnState.Red;
+            activeTurnState = BoardState.TurnState.Red;
+            targetTurnState = BoardState.TurnState.RedVictory;
             playerType = PlayerPrefs.GetInt(Settings.redPlayerKey, 1);
         }
         switch (playerType)
@@ -42,13 +47,19 @@ public class Player : MonoBehaviour
             case 1:
                 type = Type.EasyAI;
                 break;
+            case 2:
+                type = Type.MediumAI;
+                break;
+            case 3:
+                type = Type.HardAI;
+                break;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (board.boardState.turnState != neededTurnState || !board.readyForInput || thinking)
+        if (board.boardState.turnState != activeTurnState || !board.readyForInput || thinking)
             return;
 
         switch (type)
@@ -58,6 +69,12 @@ public class Player : MonoBehaviour
                 break;
             case Type.EasyAI:
                 StartCoroutine(EasyAIInput());
+                break;
+            case Type.MediumAI:
+                StartCoroutine(MCTSAIInput(10));
+                break;
+            case Type.HardAI:
+                StartCoroutine(MCTSAIInput(30));
                 break;
         }
     }
@@ -170,10 +187,10 @@ public class Player : MonoBehaviour
         int bestScore = int.MaxValue;
         int bestMoveIndex = 0;
         bool bestMoveIsUp = false;
-        for(int m = 0; m < board.boardState.validTurns.Count; m++)
+        for (int m = 0; m < board.boardState.validTurns.Count; m++)
         {
             var score = TryMove(board.boardState.validTurns[m], false);
-            if(score < bestScore)
+            if (score < bestScore)
             {
                 bestScore = score;
                 bestMoveIsUp = false;
@@ -197,6 +214,33 @@ public class Player : MonoBehaviour
         }
 
         if (bestMoveIsUp)
+            board.MoveUp();
+        else
+            board.MoveDown();
+        thinking = false;
+    }
+    IEnumerator MCTSAIInput(int budget)
+    {
+        thinking = true;
+
+        MCTS search = new MCTS(board.boardState, targetTurnState);
+        for (int i = 0; i < budget; i++)
+        {
+            for (int j = 0; j < 100; j++)
+                search.Iterate();
+            yield return null;
+        }
+        MCTS.Move bestMove = search.GetBestMove();
+        while (board.selectedTurn != bestMove.MoveIndex)
+        {
+            if (team == Team.Blue)
+                board.MoveLeft();
+            else
+                board.MoveRight();
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (bestMove.Up)
             board.MoveUp();
         else
             board.MoveDown();
