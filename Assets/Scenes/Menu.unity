@@ -308,8 +308,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -28.8}
-  m_SizeDelta: {x: 30, y: 23}
+  m_AnchoredPosition: {x: 0, y: -51.800007}
+  m_SizeDelta: {x: 30, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &250226722
 MonoBehaviour:
@@ -1536,7 +1536,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Android (Easy)
+  m_Text: Android (Simple)
 --- !u!222 &862725128
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2296,7 +2296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -68.79999}
+  m_AnchoredPosition: {x: 100, y: -91.799995}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1218449803
@@ -2431,7 +2431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: -28.799988}
+  m_AnchoredPosition: {x: 100, y: -51.8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1218670133
@@ -2484,11 +2484,17 @@ MonoBehaviour:
     m_Options:
     - m_Text: Human
       m_Image: {fileID: 0}
-    - m_Text: Android (Easy)
+    - m_Text: Android (Simple)
       m_Image: {fileID: 0}
-    - m_Text: Android (Medium)
+    - m_Text: Android (Level 1)
       m_Image: {fileID: 0}
-    - m_Text: Android (Hard)
+    - m_Text: Android (Level 3)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 5)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 10)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 30)
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3199,7 +3205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: -28.799988}
+  m_AnchoredPosition: {x: -100, y: -51.799995}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1650404216
@@ -3252,11 +3258,17 @@ MonoBehaviour:
     m_Options:
     - m_Text: Human
       m_Image: {fileID: 0}
-    - m_Text: Android (Easy)
+    - m_Text: Android (Simple)
       m_Image: {fileID: 0}
-    - m_Text: Android (Medium)
+    - m_Text: Android (Level 1)
       m_Image: {fileID: 0}
-    - m_Text: Android (Hard)
+    - m_Text: Android (Level 3)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 5)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 10)
+      m_Image: {fileID: 0}
+    - m_Text: Android (Level 30)
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

@@ -12,12 +12,12 @@ public class Player : MonoBehaviour
     public enum Type
     {
         Human,
-        EasyAI,
-        MediumAI,
-        HardAI
+        SimpleAI,
+        MCTS
     }
     public Team team;
     public Type type;
+    public int budget;
     private Board board;
     private BoardState.TurnState activeTurnState;
     private BoardState.TurnState targetTurnState;
@@ -32,12 +32,14 @@ public class Player : MonoBehaviour
             activeTurnState = BoardState.TurnState.Blue;
             targetTurnState = BoardState.TurnState.BlueVictory;
             playerType = PlayerPrefs.GetInt(Settings.bluePlayerKey, 0);
+            budget = PlayerPrefs.GetInt(Settings.bluePlayerBudgetKey, 5);
         }
         else
         {
             activeTurnState = BoardState.TurnState.Red;
             targetTurnState = BoardState.TurnState.RedVictory;
             playerType = PlayerPrefs.GetInt(Settings.redPlayerKey, 1);
+            budget = PlayerPrefs.GetInt(Settings.redPlayerBudgetKey, 5);
         }
         switch (playerType)
         {
@@ -45,13 +47,10 @@ public class Player : MonoBehaviour
                 type = Type.Human;
                 break;
             case 1:
-                type = Type.EasyAI;
+                type = Type.SimpleAI;
                 break;
             case 2:
-                type = Type.MediumAI;
-                break;
-            case 3:
-                type = Type.HardAI;
+                type = Type.MCTS;
                 break;
         }
     }
@@ -67,14 +66,11 @@ public class Player : MonoBehaviour
             case Type.Human:
                 HumanInput();
                 break;
-            case Type.EasyAI:
-                StartCoroutine(EasyAIInput());
+            case Type.SimpleAI:
+                StartCoroutine(SimpleAIInput());
                 break;
-            case Type.MediumAI:
-                StartCoroutine(MCTSAIInput(10));
-                break;
-            case Type.HardAI:
-                StartCoroutine(MCTSAIInput(30));
+            case Type.MCTS:
+                StartCoroutine(MCTSAIInput());
                 break;
         }
     }
@@ -179,7 +175,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator EasyAIInput()
+    IEnumerator SimpleAIInput()
     {
         thinking = true;
         yield return new WaitForSeconds(0.5f);
@@ -219,7 +215,7 @@ public class Player : MonoBehaviour
             board.MoveDown();
         thinking = false;
     }
-    IEnumerator MCTSAIInput(int budget)
+    IEnumerator MCTSAIInput()
     {
         thinking = true;
 
