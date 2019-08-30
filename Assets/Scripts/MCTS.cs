@@ -171,7 +171,7 @@ public class MCTS
     public int RandomFinish(BoardState boardState)
     {
         BoardState state = new BoardState(boardState);
-        for (int i = 0; i < 2000; i++)
+        for (int i = 0; i < 300; i++)
         {
             switch (state.turnState)
             {

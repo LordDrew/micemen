@@ -226,9 +226,12 @@ public class Player : MonoBehaviour
         MCTS search = new MCTS(board.boardState, targetTurnState);
         for (int i = 0; i < budget; i++)
         {
-            for (int j = 0; j < 100; j++)
-                search.Iterate();
-            yield return null;
+            for (int q = 0; q < 10; q++)
+            {
+                for (int j = 0; j < 10; j++)
+                    search.Iterate();
+                yield return null;
+            }
         }
         MCTS.Move bestMove = search.GetBestMove();
         while (board.selectedTurn != bestMove.MoveIndex)
