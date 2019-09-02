@@ -97,7 +97,7 @@ public class Board : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         while (boardState.MoveNext())
         {
-            yield return StartCoroutine(MoveMice(.5f));
+            yield return StartCoroutine(MoveMice(.4f));
         }
     }
     private void UpdatePossibleTurns()
