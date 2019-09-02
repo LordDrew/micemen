@@ -117,7 +117,7 @@ public class MCTS
                 MyTurn = !node.MyTurn
             };
             newNode.State.MoveUp(turn);
-            while (newNode.State.MoveNext()) ;
+            newNode.State.QuickMoveAllMice();
             node.ChildrenUp.Add(newNode);
             node.MovesUp.Add(turn);
         }
@@ -136,7 +136,7 @@ public class MCTS
                 MyTurn = !node.MyTurn
             };
             newNode.State.MoveDown(turn);
-            while (newNode.State.MoveNext()) ;
+            newNode.State.QuickMoveAllMice();
             node.ChildrenDown.Add(newNode);
             node.MovesDown.Add(turn);
         }
@@ -190,7 +190,7 @@ public class MCTS
             {
                 state.MoveDown(state.validTurns[Random.Range(0, state.validTurns.Count)]);
             }
-            while (state.MoveNext()) ;
+            state.QuickMoveAllMice();
         }
         return 0;
     }

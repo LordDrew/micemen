@@ -90,8 +90,9 @@ public class BoardState
 
         // initial mice movement requires starting from end turn state
         turnState = Random.Range(0, 2) == 0 ? TurnState.BlueEnd : TurnState.RedEnd;
-        while (MoveNext());
+        QuickMoveAllMice();
     }
+
     public BoardState(BoardState other)
     {
         tiles = (TileType[,])other.tiles.Clone();
@@ -302,7 +303,7 @@ public class BoardState
         }
         NextTurnState();
     }
-    public bool MoveNext()
+    public bool MoveNextMice()
     {
         if (CheckVictory())
             return false;
@@ -330,6 +331,11 @@ public class BoardState
         }
         NextTurnState();
         return false;
+    }
+
+    public void QuickMoveAllMice()
+    {
+        while (MoveNextMice()) ;
     }
 
     bool CheckVictory()

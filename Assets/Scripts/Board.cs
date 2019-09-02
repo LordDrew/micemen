@@ -95,7 +95,7 @@ public class Board : MonoBehaviour
     IEnumerator AutoMoveMice()
     {
         yield return new WaitForSeconds(0.75f);
-        while (boardState.MoveNext())
+        while (boardState.MoveNextMice())
         {
             yield return StartCoroutine(MoveMice(.4f));
         }

@@ -150,7 +150,7 @@ public class Player : MonoBehaviour
             bs.MoveUp(move);
         else
             bs.MoveDown(move);
-        while (bs.MoveNext()) ;
+        bs.QuickMoveAllMice();
 
         if (team == Team.Blue)
         {
