@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Column : MonoBehaviour
@@ -8,17 +7,7 @@ public class Column : MonoBehaviour
     public Cell[] cells;
     public float scale = 0.75f;
     public bool isMoving = false;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void SetState(BoardState boardState, int column)
     {
         cells = new Cell[boardState.tiles.GetLength(0)];

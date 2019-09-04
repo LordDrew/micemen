@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardState
@@ -214,7 +213,7 @@ public class BoardState
     List<int> GetValidTurns()
     {
         var turns = new HashSet<int>();
-        switch(turnState)
+        switch (turnState)
         {
             case TurnState.Blue:
                 foreach (var mouse in blueMice)
@@ -249,12 +248,12 @@ public class BoardState
     {
         lastTurn = column;
         TileType tmp = tiles[tiles.GetLength(0) - 1, column];
-        for(int row = tiles.GetLength(0) - 1; row > 0; row--)
+        for (int row = tiles.GetLength(0) - 1; row > 0; row--)
         {
             tiles[row, column] = tiles[row - 1, column];
         }
         tiles[0, column] = tmp;
-        foreach(var mouse in blueMice)
+        foreach (var mouse in blueMice)
         {
             if (mouse.X == column)
             {
@@ -356,7 +355,7 @@ public class BoardState
     bool MiceFall(IMouse[] mice, ref int score)
     {
         IMouse selectedMouse = null;
-        foreach(var mouse in mice)
+        foreach (var mouse in mice)
         {
             if (!mouse.IsActive)
                 continue;

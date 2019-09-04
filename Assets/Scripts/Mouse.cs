@@ -1,19 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mouse : MonoBehaviour
 {
-    public enum Faction
-    {
-        Blue,
-        Red
-    }
     private void Start()
     {
         GetComponent<Animator>().SetFloat("Offset", Random.Range(0.0f, 1.0f));
     }
-    public Faction faction;
     public IEnumerator MoveToCell(Cell targetCell, float targetTime)
     {
         transform.SetParent(targetCell.transform);
@@ -37,7 +30,6 @@ public class Mouse : MonoBehaviour
         {
             while (elapsedTime < targetTime)
             {
-                //print(elapsedTime);
                 elapsedTime += Time.deltaTime;
                 transform.position = Vector3.Lerp(startPos, targetPos, (elapsedTime / targetTime));
                 yield return null;

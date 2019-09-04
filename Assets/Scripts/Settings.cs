@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -49,11 +47,11 @@ public class Settings : MonoBehaviour
             miceSymmetry.interactable = false;
         }
     }
-    
+
     private void GetPlayer(string playerKey, string budgetKey, Dropdown dropdown, int defaultValue)
     {
         int value = PlayerPrefs.GetInt(playerKey, defaultValue);
-        switch(value)
+        switch (value)
         {
             case 0:
             case 1:

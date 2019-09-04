@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -220,10 +219,7 @@ public class MCTS
                 best_i = i;
             }
         }
-        if (bestMove.Up)
-            Debug.LogFormat("Root: {0}, Best: {1} ({2})", root.Score, root.ChildrenUp[best_i].Score, bestVisits);
-        else
-            Debug.LogFormat("Root: {0}, Best: {1} ({2})", root.Score, root.ChildrenDown[best_i].Score, bestVisits);
+
         return bestMove;
     }
 }
